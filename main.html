@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klipper calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #1E1E1E; color: #E0E0E0}
+        select, input, button { margin: 10px; padding: 10px; font-size: 16px; border-radius: 5px}
+        hr {
+              width: 100%;
+              height: 2px;
+              background: linear-gradient(to right, transparent, black, transparent);
+              border: none;
+              margin: 30px 0;
+          }
+        .container { max-width: 400px; margin: auto; }
+        .welcome h1 {display: inline-block; border-bottom: 3px solid red; margin-bottom: 2px}
+        .steps-per-mm-to-rotation-distance {display: flex; flex-direction: column; gap: 10px} h2 {text-align: left}
+    </style>
+</head>
+<body>
+    <div class="welcome">
+      <h1>Welcome to KLIPPER Calculator</h1>
+      <h4>This site includes some useful calculators for klipper</h4>
+    </div>
+    <hr>
+    <div class="steps-per-mm-to-rotation-distance">
+        <h2>Steps per mm to rotation distance:</h2>
+        
+        <label for="microstepping">Microsteps:</label>
+        <select id="microstepping">
+            <option value="1">1/1</option>
+            <option value="2">1/2</option>
+            <option value="4">1/4</option>
+            <option value="8">1/8</option>
+            <option value="16" selected>1/16</option>
+            <option value="35">1/32</option>
+            <option value="64">1/64</option>
+            <option value="128">1/128</option>
+            <option value="256">1/256</option>
+        </select>
+        
+        <label for="fullsteps">Full Steps per Rotation:</label>
+        <select id="fullsteps">
+            <option value="200" selected>200 - 1.8°</option>
+            <option value="400">400 - 0.9°</option>
+        </select>
+        
+        <label for="steps_per_mm">Steps per mm:</label>
+        <input type="number" id="steps_per_mm" placeholder="Enter steps/mm">
+        
+        <button onclick="calculateRotationDistance()">Calculate</button>
+        
+        <h3>Rotation Distance: <span id="result">--</span> mm</h3>
+    </div>
+    
+    <script>
+        function calculateRotationDistance() {
+            let microsteps = parseFloat(document.getElementById("microstepping").value);
+            let fullsteps = parseFloat(document.getElementById("fullsteps").value);
+            let stepsPerMM = parseFloat(document.getElementById("steps_per_mm").value);
+            
+            if (isNaN(stepsPerMM) || stepsPerMM <= 0) {
+                alert("Zadaj platnú hodnotu pre Steps per mm!");
+                return;
+            }
+            
+            let rotationDistance = (fullsteps * microsteps) / stepsPerMM;
+            document.getElementById("result").innerText = rotationDistance.toFixed(4);
+        }
+    </script>
+</body>
+</html>
