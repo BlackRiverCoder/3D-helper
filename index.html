@@ -19,6 +19,7 @@
         .button-container {display: flex; justify-content: center; align-items: center;width: 100%;}
         .welcome h1 {display: inline-block; border-bottom: 3px solid red; margin-bottom: 2px}
         .steps-per-mm-to-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center} h2 {text-align: left}
+        .extruder-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center} h2 {text-align: left}
     </style>
 </head>
 <body>
@@ -79,7 +80,7 @@
             <button onclick="calculateRotationDistanceExtruder()">Calculate</button>
         </div>
 
-        <h3>Rotation Distance: <span id="result_extruder_rotation_distance">--</span></h3>
+        <h3>Extruder Rotation Distance: <span id="result_extruder_rotation_distance">--</span></h3>
     </div>
     
     <script>
@@ -98,10 +99,10 @@
         }
 
         function calculateRotationDistanceExtruder() {
-            let previousrotationdistance = parseFloat(document.getElementbyId("previous_rotation_distance"))
-            let initialmarkdistance = parseFloat(document.getElementbyId("initial_mark_distance"))
-            let requestedextrudedistance = parseFloat(document.getElementbyId("requested_extrude_distance"))
-            let subsequentmarkdistance = parseFloat(document.getElementbyId("subsequent_mark_distance"))
+            let previousrotationdistance = parseFloat(document.getElementById("previous_rotation_distance").value)
+            let initialmarkdistance = parseFloat(document.getElementById("initial_mark_distance").value)
+            let requestedextrudedistance = parseFloat(document.getElementById("requested_extrude_distance").value)
+            let subsequentmarkdistance = parseFloat(document.getElementById("subsequent_mark_distance").value)
 
             if (isNaN(previousrotationdistance) || previousrotationdistance <= 0) {
                 alert("Enter valid value for previous rotation distance!");
