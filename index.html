@@ -8,39 +8,55 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            text-align: center;
             margin: 0;
             padding: 20px;
         }
         h1 {
+            text-align: center;
             color: #333;
         }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .card {
-            background: white;
+        .section {
+            margin-bottom: 40px;
+            background-color: #fff;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 250px;
-            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .card h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
+        .section h2 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 1.6em;
         }
         .version {
-            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .version span {
             font-weight: bold;
-            color: #007bff;
         }
         .error {
             color: red;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
         .welcome h1 {display: inline-block; border-bottom: 3px solid red; margin-bottom: 2px}
     </style>
@@ -53,46 +69,46 @@
     <div class="latest-versions">
         <h2>Overview of latest versions</h2>
     </div>
-    <div class="container">
-        <div class="card">
-            <h2>Klipper</h2>
-            <p class="version" id="klipper-version">Loading...</p>
-        </div>
+    <div class="section" id="firmwares">
+      <h2>Firmwares</h2>
+      <div class="version">
+          <span>Klipper:</span> <span id="klipper-version">Loading...</span>
+      </div>
+      <div class="version">
+          <span>Marlin:</span> <span id="marlin-version">Loading...</span>
+      </div>
+  </div>
 
-        <div class="card">
-            <h2>Moonraker</h2>
-            <p class="version" id="moonraker-version">Loading...</p>
-        </div>
+  <div class="section" id="web-interfaces">
+      <h2>Web Interfaces</h2>
+      <div class="version">
+          <span><a href="https://github.com/Arksine/moonraker" target="_blank" style="text-decoration: none; color: inherit;">Moonraker:</a></span>
+          <a href="https://github.com/Arksine/moonraker/tags", id="moonraker-version">Loading...</a>
+      </div>
+      <div class="version">
+          <span>Mainsail:</span> <span id="mainsail-version">Loading...</span>
+      </div>
+      <div class="version">
+          <span>Fluidd:</span> <span id="fluidd-version">Loading...</span>
+      </div>
+      <div class="version">
+          <span>OctoPrint:</span> <span id="octoprint-version">Loading...</span>
+      </div>
+  </div>
 
-        <div class="card">
-            <h2>Mainsail</h2>
-            <p class="version" id="mainsail-version">Loading...</p>
-        </div>
+  <div class="section" id="slicers">
+      <h2>Slicers</h2>
+      <div class="version">
+          <span>OrcaSlicer:</span> <span id="orca-version">Loading...</span>
+      </div>
+      <div class="version">
+          <span>PrusaSlicer:</span> <span id="prusa-version">Loading...</span>
+      </div>
+  </div>
 
-        <div class="card">
-            <h2>Fluidd</h2>
-            <p class="version" id="fluidd-version">Loading...</p>
-        </div>
-
-        <div class="card">
-            <h2>Marlin</h2>
-            <p class="version" id="marlin-version">Loading...</p>
-        </div>
-
-        <div class="card">
-            <h2>Orca Slicer</h2>
-            <p class="version" id="orca-version">Loading...</p>
-        </div>
-
-        <div class="card">
-            <h2>PrusaSlicer</h2>
-            <p class="version" id="prusa-version">Loading...</p>
-        </div>
-
-        <div class="card">
-            <h2>OctoPrint</h2>
-            <p class="version" id="octoprint-version">Loading...</p>
-        </div>
+  <div class="button-container">
+      <button onclick="fetchLatestVersions()">Reload versions</button>
+  </div>
     </div>
     <script>
         async function fetchLatestVersion(repo, elementId) {
@@ -106,7 +122,24 @@
             }
         }
 
-        fetchLatestVersion("Klipper3d/klipper", "klipper-version");
+        async function fetchLatestKlipperCommit(repo, elementId) {
+            try {
+                let response = await fetch(`https://api.github.com/repos/${repo}/tags`);
+                let data = await response.json();
+                
+                if (data.length > 0) {
+                    let latestTag = data[0].name;
+                    document.getElementById(elementId).innerText = latestTag;  
+                } else {
+                    document.getElementById(elementId).innerText = "No tags found";
+                }
+            } catch (error) {
+                document.getElementById(elementId).innerText = "Error while loading";
+                document.getElementById(elementId).classList.add("error");
+            }
+        }
+
+        fetchLatestKlipperCommit("Klipper3d/klipper", "klipper-version");
         fetchLatestVersion("Arksine/moonraker", "moonraker-version");
         fetchLatestVersion("meteyou/mainsail", "mainsail-version");
         fetchLatestVersion("fluidd-core/fluidd", "fluidd-version");
