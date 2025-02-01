@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klipper calculator</title>
+    <title>Marlin calculator</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #1E1E1E; color: #E0E0E0;}
         select, input { margin: 10px; padding: 10px; font-size: 16px; border-radius: 5px; width: 85%}
@@ -36,21 +36,21 @@
         .container { max-width: 400px; margin: auto; }
         .button-container {display: flex; justify-content: center; align-items: center;width: 100%;}
         .welcome h1 {display: inline-block; border-bottom: 3px solid blue; margin-bottom: 2px}
-        .steps-per-mm-to-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center}
-        .extruder-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center} 
-        .lead-screw-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center}
+        .rotation-distance-to-steps-per-mm {display: flex; flex-direction: column; gap: 10px; align-items: center}
+        .extruder-steps-per-mm {display: flex; flex-direction: column; gap: 10px; align-items: center} 
+        .lead-screw-steps-per-mm {display: flex; flex-direction: column; gap: 10px; align-items: center}
     </style>
 </head>
 <body>
     <div class="welcome">
-      <h1>Welcome to KLIPPER Calculator</h1>
-      <h4>This site includes some useful calculators for Klipper firmware</h4>
+      <h1>Welcome to MARLIN Calculator</h1>
+      <h4>This site includes some useful calculators for Marlin firmware</h4>
     </div>
 
     <hr>
 
-    <div class="steps-per-mm-to-rotation-distance">
-        <h2>Steps per mm to rotation distance:</h2>
+    <div class="rotation-distance-to-steps-per-mm">
+        <h2>Rotation distance to steps/mm:</h2>
         
         <label for="microstepping">Select Microsteps:</label>
         <select id="microstepping">
@@ -71,48 +71,66 @@
             <option value="400">400 - 0.9°</option>
         </select>
         
-        <label for="steps_per_mm">Steps per mm:</label>
-        <input type="number" id="steps_per_mm" placeholder="Enter steps/mm">
+        <label for="rotation_distance">Rotation distance:</label>
+        <input type="number" id="rotation_distance" placeholder="Enter rotation distance">
         
         <div class="button-container">
-          <button onclick="calculateRotationDistance()">Calculate</button>
+          <button onclick="calculateStepsPerMM()">Calculate</button>
         </div>
         
-        <h3>Rotation Distance: <span id="result_rotation_distance">--</span></h3>
+        <h3>Steps/mm: <span id="result_steps_per_mm">--</span></h3>
     </div>
 
     <hr>
 
-    <div class="extruder-rotation-distance">
-        <h2>Extruder rotation distance calibration</h2>
-        <h4>View official klipper manual <a href="https://www.klipper3d.org/Rotation_Distance.html">here</a></h4>
+    <div class="extruder-steps-per-mm">
+        <h2>Extruder Steps/mm calibration</h2>
 
-        <label for="previous_rotation_distance">Enter your previous rotation distance:</label>
-        <input type="number" id="previous_rotation_distance" placeholder="Enter previous rotation distance">
+        <label for="current_steps_per_mm">Enter your current steps/mm:</label>
+        <input type="number" id="current_steps_per_mm" placeholder="Enter current steps/mm">
 
         <label for="initial_mark_distance">Enter your initial mark distance on filament:</label>
         <input type="number" id="initial_mark_distance" placeholder="Enter initial mark distance" value="120">
 
         <label for="requested_extrude_distance">Enter requested extrude of the filament:</label>
-        <input type="number" id="requested_extrude_distance" placeholder="Enter requested extrude distance" value="100">
+        <input type="number" id="requested_extrude_distance" placeholder="Enter requested extrude" value="100">
 
         <label for="subsequent_mark_distance">Enter measured mark distance after extrude:</label>
         <input type="number" id="subsequent_mark_distance" placeholder="Enter measured mark distance">
 
         <div class="button-container">
-            <button onclick="calculateRotationDistanceExtruder()">Calculate</button>
+            <button onclick="calculateStepsPerMMExtruder()">Calculate</button>
         </div>
 
-        <h3>Rotation Distance: <span id="result_extruder_rotation_distance">--</span></h3>
+        <h3>New extruder Steps/mm: <span id="result_extruder_steps_per_mm">--</span></h3>
     </div>
 
     <hr>
 
-    <div class="lead-screw-rotation-distance">
-        <h2>Lead screw to Z rotation distance</h2>
-
+    <div class="lead-screw-steps-per-mm">
+        <h2>Z steps/mm:</h2>
+        
+        <label for="microstepping_leadscrew">Select Microsteps:</label>
+        <select id="microstepping_leadscrew" onchange="calculateLeadScrew()">
+            <option value="1">1/1</option>
+            <option value="2">1/2</option>
+            <option value="4">1/4</option>
+            <option value="8">1/8</option>
+            <option value="16" selected>1/16</option>
+            <option value="35">1/32</option>
+            <option value="64">1/64</option>
+            <option value="128">1/128</option>
+            <option value="256">1/256</option>
+        </select>
+        
+        <label for="fullsteps_leadscrew">Select Full Steps per Rotation:</label>
+        <select id="fullsteps_leadscrew" onchange="calculateLeadScrew()">
+            <option value="200" selected>200 - 1.8°</option>
+            <option value="400">400 - 0.9°</option>
+        </select>
+        
         <label for="leadscrew">Select Leadscrew:</label>
-        <select id="leadscrew" onchange="showLeadScrewvalue()">
+        <select id="leadscrew" onchange="calculateLeadScrew()">
             <option value="2.0" selected>T8-2 (Pitch - 2.0, Threads - 1)</option>
             <option value="4.0">T8x4 (Pitch - 2.0, Threads - 2)</option>
             <option value="8.0">T8x8 (Pitch - 2.0, Threads - 4)</option>
@@ -128,33 +146,33 @@
             <option value="1.75">M12 (Pitch - 1.75, Threads - 1)</option>
             <option value="2.0">M16 (Pitch - 2.0, Threads - 1)</option>
         </select>
-
-        <h3>Z Rotation Distance: <span id="result_leadscrew_rotation_distance">2.0000</span></h3>
+        
+        <h3>Z Steps/mm: <span id="result_Z_steps_per_mm">1600.0000</span></h3>
     </div>
     
     <script>
-        function calculateRotationDistance() {
+        function calculateStepsPerMM() {
             let microsteps = parseFloat(document.getElementById("microstepping").value);
             let fullsteps = parseFloat(document.getElementById("fullsteps").value);
-            let stepsPerMM = parseFloat(document.getElementById("steps_per_mm").value);
+            let rotationDistance = parseFloat(document.getElementById("rotation_distance").value);
             
-            if (isNaN(stepsPerMM) || stepsPerMM <= 0) {
+            if (isNaN(rotationDistance) || rotationDistance <= 0) {
                 alert("Enter valid value for steps/mm!");
                 return;
             }
             
-            let rotationDistance = (fullsteps * microsteps) / stepsPerMM;
-            document.getElementById("result_rotation_distance").innerText = rotationDistance.toFixed(4);
+            let stepsPerMM = (fullsteps * microsteps) / rotationDistance;
+            document.getElementById("result_steps_per_mm").innerText = stepsPerMM.toFixed(4);
         }
 
-        function calculateRotationDistanceExtruder() {
-            let previousrotationdistance = parseFloat(document.getElementById("previous_rotation_distance").value)
+        function calculateStepsPerMMExtruder() {
+            let currentstepspermm = parseFloat(document.getElementById("current_steps_per_mm").value)
             let initialmarkdistance = parseFloat(document.getElementById("initial_mark_distance").value)
             let requestedextrudedistance = parseFloat(document.getElementById("requested_extrude_distance").value)
             let subsequentmarkdistance = parseFloat(document.getElementById("subsequent_mark_distance").value)
 
-            if (isNaN(previousrotationdistance) || previousrotationdistance <= 0) {
-                alert("Enter valid value for previous rotation distance!");
+            if (isNaN(currentstepspermm) || currentstepspermm <= 0) {
+                alert("Enter valid value for current steps/mm!");
                 return;
             }
 
@@ -173,14 +191,18 @@
                 return;
             }
 
-            let actualExtrudeDistance = initialmarkdistance - subsequentmarkdistance;
-            let rotationExtruderDistance = previousrotationdistance * actualExtrudeDistance / requestedextrudedistance
-            document.getElementById("result_extruder_rotation_distance").innerText = rotationExtruderDistance.toFixed(4);
+            let actualExtrudestepspermm = initialmarkdistance - subsequentmarkdistance;
+            let rotationExtruderstepspermm = currentstepspermm * actualExtrudestepspermm / requestedextrudedistance
+            document.getElementById("result_extruder_steps_per_mm").innerText = rotationExtruderstepspermm.toFixed(4);
         }
 
-        function showLeadScrewvalue() {
-            let rotationDistanceLeadScrew = parseFloat(document.getElementById("leadscrew").value)
-            document.getElementById("result_leadscrew_rotation_distance").innerText = rotationDistanceLeadScrew.toFixed(4);
+        function calculateLeadScrew() {
+            let microsteps_leadscrew = parseFloat(document.getElementById("microstepping_leadscrew").value);
+            let fullsteps_leadscrew = parseFloat(document.getElementById("fullsteps_leadscrew").value);
+            let LeadScrew = parseFloat(document.getElementById("leadscrew").value);
+
+            let Z_steps_per_mm = (fullsteps_leadscrew * microsteps_leadscrew) / LeadScrew
+            document.getElementById("result_Z_steps_per_mm").innerText = Z_steps_per_mm.toFixed(4);
         }
     </script>
 </body>
