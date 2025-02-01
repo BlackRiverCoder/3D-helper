@@ -17,9 +17,9 @@
           }
         .container { max-width: 400px; margin: auto; }
         .button-container {display: flex; justify-content: center; align-items: center;width: 100%;}
-        .welcome h1 {display: inline-block; border-bottom: 3px solid red; margin-bottom: 2px}
-        .steps-per-mm-to-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center} h2 {text-align: left}
-        .extruder-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center} h2 {text-align: left}
+        .welcome h1 {display: inline-block; border-bottom: 3px solid blue; margin-bottom: 2px}
+        .steps-per-mm-to-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center}
+        .extruder-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center} 
     </style>
 </head>
 <body>
@@ -62,7 +62,7 @@
     <hr>
     <div class="extruder-rotation-distance">
         <h2>Extruder rotation distance calibration</h2>
-        <a href="https://www.klipper3d.org/Rotation_Distance.html">Official klipper manual</a>
+        <h4>View official klipper manual <a href="https://www.klipper3d.org/Rotation_Distance.html">here</a></h4>
 
         <label for="previous_rotation_distance">Enter your previous rotation distance:</label>
         <input type="number" id="previous_rotation_distance" placeholder="Enter previous rotation distance">
