@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klipper calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #1E1E1E; color: #E0E0E0;}
+        select, input { margin: 10px; padding: 10px; font-size: 16px; border-radius: 5px; width: 85%}
+        button { margin: 10px; padding: 10px; font-size: 16px; border-radius: 5px; width: 25%; cursor: pointer;}
+        hr {
+              width: 100%;
+              height: 2px;
+              background: linear-gradient(to right, transparent, black, transparent);
+              border: none;
+              margin: 30px 0;
+          }
+        .container { max-width: 400px; margin: auto; }
+        .button-container {display: flex; justify-content: center; align-items: center;width: 100%;}
+        .welcome h1 {display: inline-block; border-bottom: 3px solid red; margin-bottom: 2px}
+        .steps-per-mm-to-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center} h2 {text-align: left}
+        .extruder-rotation-distance {display: flex; flex-direction: column; gap: 10px; align-items: center} h2 {text-align: left}
+    </style>
+</head>
+<body>
+    <div class="welcome">
+      <h1>Welcome to KLIPPER Calculator</h1>
+      <h4>This site includes some useful calculators for klipper firmware</h4>
+    </div>
+    <hr>
+    <div class="steps-per-mm-to-rotation-distance">
+        <h2>Steps per mm to rotation distance:</h2>
+        
+        <label for="microstepping">Microsteps:</label>
+        <select id="microstepping">
+            <option value="1">1/1</option>
+            <option value="2">1/2</option>
+            <option value="4">1/4</option>
+            <option value="8">1/8</option>
+            <option value="16" selected>1/16</option>
+            <option value="35">1/32</option>
+            <option value="64">1/64</option>
+            <option value="128">1/128</option>
+            <option value="256">1/256</option>
+        </select>
+        
+        <label for="fullsteps">Full Steps per Rotation:</label>
+        <select id="fullsteps">
+            <option value="200" selected>200 - 1.8°</option>
+            <option value="400">400 - 0.9°</option>
+        </select>
+        
+        <label for="steps_per_mm">Steps per mm:</label>
+        <input type="number" id="steps_per_mm" placeholder="Enter steps/mm">
+        
+        <div class="button-container">
+          <button onclick="calculateRotationDistance()">Calculate</button>
+        </div>
+        
+        <h3>Rotation Distance: <span id="result_rotation_distance">--</span></h3>
+    </div>
+    <hr>
+    <div class="extruder-rotation-distance">
+        <h2>Extruder rotation distance calibration</h2>
+        <a href="https://www.klipper3d.org/Rotation_Distance.html">Official klipper manual</a>
+
+        <label for="previous_rotation_distance">Enter your previous rotation distance:</label>
+        <input type="number" id="previous_rotation_distance" placeholder="Enter previous rotation distance">
+
+        <label for="initial_mark_distance">Enter your initial mark distance on filament:</label>
+        <input type="number" id="initial_mark_distance" placeholder="Enter initial mark distance">
+
+        <label for="requested_extrude_distance">Enter requested extrude of the filament:</label>
+        <input type="number" id="requested_extrude_distance" placeholder="Enter requested extrude">
+
+        <label for="subsequent_mark_distance">Enter measured mark distance after extrude:</label>
+        <input type="number" id="subsequent_mark_distance" placeholder="Enter measured mark distance">
+
+        <div class="button-container">
+            <button onclick="calculateRotationDistanceExtruder()">Calculate</button>
+        </div>
+
+        <h3>Extruder Rotation Distance: <span id="result_extruder_rotation_distance">--</span></h3>
+    </div>
+    
+    <script>
+        function calculateRotationDistance() {
+            let microsteps = parseFloat(document.getElementById("microstepping").value);
+            let fullsteps = parseFloat(document.getElementById("fullsteps").value);
+            let stepsPerMM = parseFloat(document.getElementById("steps_per_mm").value);
+            
+            if (isNaN(stepsPerMM) || stepsPerMM <= 0) {
+                alert("Enter valid value for steps/mm!");
+                return;
+            }
+            
+            let rotationDistance = (fullsteps * microsteps) / stepsPerMM;
+            document.getElementById("result_rotation_distance").innerText = rotationDistance.toFixed(4);
+        }
+
+        function calculateRotationDistanceExtruder() {
+            let previousrotationdistance = parseFloat(document.getElementById("previous_rotation_distance").value)
+            let initialmarkdistance = parseFloat(document.getElementById("initial_mark_distance").value)
+            let requestedextrudedistance = parseFloat(document.getElementById("requested_extrude_distance").value)
+            let subsequentmarkdistance = parseFloat(document.getElementById("subsequent_mark_distance").value)
+
+            if (isNaN(previousrotationdistance) || previousrotationdistance <= 0) {
+                alert("Enter valid value for previous rotation distance!");
+                return;
+            }
+
+            if (isNaN(initialmarkdistance) || initialmarkdistance <= 0) {
+                alert("Enter valid value for initial mark distance!");
+                return;
+            }
+
+            if (isNaN(requestedextrudedistance) || requestedextrudedistance <= 0) {
+                alert("Enter valid value for requested extrude distance");
+                return;
+            }
+
+            if (isNaN(subsequentmarkdistance) || subsequentmarkdistance <= 0) {
+                alert("Enter valid value for subsequent mark distance!");
+                return;
+            }
+
+            let actualExtrudeDistance = initialmarkdistance - subsequentmarkdistance;
+            let rotationExtruderDistance = previousrotationdistance * actualExtrudeDistance / requestedextrudedistance
+            document.getElementById("result_extruder_rotation_distance").innerText = rotationExtruderDistance.toFixed(4);
+        }
+    </script>
+</body>
+</html>
