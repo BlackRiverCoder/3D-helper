@@ -24,7 +24,7 @@
 <body>
     <div class="welcome">
       <h1>Welcome to KLIPPER Calculator</h1>
-      <h4>This site includes some useful calculators for klipper</h4>
+      <h4>This site includes some useful calculators for klipper firmware</h4>
     </div>
     <hr>
     <div class="steps-per-mm-to-rotation-distance">
@@ -56,7 +56,30 @@
           <button onclick="calculateRotationDistance()">Calculate</button>
         </div>
         
-        <h3>Rotation Distance: <span id="result">--</span> mm</h3>
+        <h3>Rotation Distance: <span id="result_rotation_distance">--</span></h3>
+    </div>
+    <hr>
+    <div class="extruder-rotation-distance">
+        <h2>Extruder rotation distance calibration</h2>
+        <a href="https://www.klipper3d.org/Rotation_Distance.html">Official klipper manual</a>
+
+        <label for="previous_rotation_distance">Enter your previous rotation distance:</label>
+        <input type="number" id="previous_rotation_distance" placeholder="Enter previous rotation distance">
+
+        <label for="initial_mark_distance">Enter your initial mark distance on filament:</label>
+        <input type="number" id="initial_mark_distance" placeholder="Enter initial mark distance">
+
+        <label for="requested_extrude_distance">Enter requested extrude of the filament:</label>
+        <input type="number" id="requested_extrude_distance" placeholder="Enter requested extrude">
+
+        <label for="subsequent_mark_distance">Enter measured mark distance after extrude:</label>
+        <input type="number" id="subsequent_mark_distance" placeholder="Enter measured mark distance">
+
+        <div class="button-container">
+            <button onclick="calculateRotationDistanceExtruder()">Calculate</button>
+        </div>
+
+        <h3>Rotation Distance: <span id="result_extruder_rotation_distance">--</span></h3>
     </div>
     
     <script>
@@ -66,12 +89,43 @@
             let stepsPerMM = parseFloat(document.getElementById("steps_per_mm").value);
             
             if (isNaN(stepsPerMM) || stepsPerMM <= 0) {
-                alert("Zadaj platnú hodnotu pre Steps per mm!");
+                alert("Enter valid value for steps/mm!");
                 return;
             }
             
             let rotationDistance = (fullsteps * microsteps) / stepsPerMM;
-            document.getElementById("result").innerText = rotationDistance.toFixed(4);
+            document.getElementById("result_rotation_distance").innerText = rotationDistance.toFixed(4);
+        }
+
+        function calculateRotationDistanceExtruder() {
+            let previousrotationdistance = parseFloat(document.getElementbyId("previous_rotation_distance"))
+            let initialmarkdistance = parseFloat(document.getElementbyId("initial_mark_distance"))
+            let requestedextrudedistance = parseFloat(document.getElementbyId("requested_extrude_distance"))
+            let subsequentmarkdistance = parseFloat(document.getElementbyId("subsequent_mark_distance"))
+
+            if (isNaN(previousrotationdistance) || previousrotationdistance <= 0) {
+                alert("Enter valid value for previous rotation distance!");
+                return;
+            }
+
+            if (isNaN(initialmarkdistance) || initialmarkdistance <= 0) {
+                alert("Enter valid value for initial mark distance!");
+                return;
+            }
+
+            if (isNaN(requestedextrudedistance) || requestedextrudedistance <= 0) {
+                alert("Enter valid value for requested extrude distance");
+                return;
+            }
+
+            if (isNaN(subsequentmarkdistance) || subsequentmarkdistance <= 0) {
+                alert("Enter valid value for subsequent mark distance!");
+                return;
+            }
+
+            let actualExtrudeDistance = initialmarkdistance - subsequentmarkdistance;
+            let rotationExtruderDistance = previousrotationdistance * actualExtrudeDistance / requestedextrudedistance
+            document.getElementById("result_extruder_rotation_distance").innerText = rotationExtruderDistance.toFixed(4);
         }
     </script>
 </body>
