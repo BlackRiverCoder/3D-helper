@@ -10,10 +10,20 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
+            text-align: center;
         }
         h1 {
             text-align: center;
             color: #333;
+        }
+        hr {
+            width: 100%; 
+            height: 3px; 
+            background: linear-gradient(to right, transparent, #333, transparent); 
+            border: none;
+            margin: 30px auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .section {
             margin-bottom: 40px;
@@ -58,7 +68,64 @@
         button:hover {
             background-color: #0056b3;
         }
-        .welcome h1 {display: inline-block; border-bottom: 3px solid red; margin-bottom: 2px}
+        .welcome h1 {
+              display: inline-block; 
+              border-bottom: 3px solid red; 
+              margin-bottom: 2px;
+        }
+        .latest-versions {
+              text-align: center;
+        }
+        .section {
+              display: flex; 
+              align-items: center; 
+              justify-content: center; 
+              flex-direction: column; 
+              max-width: 85%; 
+              margin: auto; 
+              margin-bottom: 20px;
+        }
+        .version {
+              display: flex; 
+              align-items: center; 
+              flex-direction: row; 
+              width: 90%
+        }
+        .main-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            padding: 40px 0;
+            flex-wrap: wrap;
+        }
+        .calculator-button {
+            display: block;
+            margin: 10px 0;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .calculator-button:hover {
+            background-color: #005f73;
+            transform: scale(1.05);
+        }
+        .calc {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -66,50 +133,87 @@
       <h1>Welcome to 3D printing calculator</h1>
       <h4>This site includes some useful calculators for firmware and slicers, so you don't need to calculate everything manually</h4>
     </div>
+
+    <hr>
+
     <div class="latest-versions">
         <h2>Overview of latest versions</h2>
     </div>
+
     <div class="section" id="firmwares">
       <h2>Firmwares</h2>
       <div class="version">
-          <span>Klipper:</span> <span id="klipper-version">Loading...</span>
+          <span><a href="https://www.klipper3d.org/" target="_blank" style="text-decoration: none; color: inherit;">Klipper:</a></span>
+          <a href="https://github.com/Klipper3d/klipper/tags", id="klipper-version">Loading...</a>
       </div>
       <div class="version">
-          <span>Marlin:</span> <span id="marlin-version">Loading...</span>
+          <span><a href="https://marlinfw.org/" target="_blank" style="text-decoration: none; color: inherit;">Marlin:</a></span>
+          <a href="https://github.com/MarlinFirmware/Marlin/releases", id="marlin-version">Loading...</a>
       </div>
   </div>
 
   <div class="section" id="web-interfaces">
       <h2>Web Interfaces</h2>
       <div class="version">
-          <span><a href="https://github.com/Arksine/moonraker" target="_blank" style="text-decoration: none; color: inherit;">Moonraker:</a></span>
+          <span><a href="https://moonraker.readthedocs.io/en/latest/" target="_blank" style="text-decoration: none; color: inherit;">Moonraker:</a></span>
           <a href="https://github.com/Arksine/moonraker/tags", id="moonraker-version">Loading...</a>
       </div>
       <div class="version">
-          <span>Mainsail:</span> <span id="mainsail-version">Loading...</span>
+          <span><a href="https://docs.mainsail.xyz/" target="_blank" style="text-decoration: none; color: inherit;">Mainsail:</a></span> 
+          <a href="https://github.com/mainsail-crew/mainsail/releases", id="mainsail-version">Loading...</a>
       </div>
       <div class="version">
-          <span>Fluidd:</span> <span id="fluidd-version">Loading...</span>
+          <span><a href="https://docs.fluidd.xyz/", target="_blank" style="text-decoration: none; color: inherit;">Fluidd:</a></span> 
+          <a href="https://github.com/fluidd-core/fluidd/releases", id="fluidd-version">Loading...</a>
       </div>
       <div class="version">
-          <span>OctoPrint:</span> <span id="octoprint-version">Loading...</span>
+          <span><a href="https://octoprint.org/", target="_blank" style="text-decoration: none; color: inherit;">OctoPrint:</a></span> 
+          <a href="https://github.com/OctoPrint/OctoPrint/releases", id="octoprint-version">Loading...</a>
       </div>
   </div>
 
   <div class="section" id="slicers">
       <h2>Slicers</h2>
       <div class="version">
-          <span>OrcaSlicer:</span> <span id="orca-version">Loading...</span>
+          <span><a href="https://github.com/SoftFever/OrcaSlicer" target="_blank" style="text-decoration: none; color: inherit;">OrcaSlicer:</a></span>
+          <a href="https://github.com/SoftFever/OrcaSlicer/releases", id="orca-version">Loading...</a>
       </div>
       <div class="version">
-          <span>PrusaSlicer:</span> <span id="prusa-version">Loading...</span>
+          <span><a href="https://www.prusa3d.com/page/prusaslicer_424/" target="_blank" style="text-decoration: none; color: inherit;">PrusaSlicer:</a></span>
+          <a href="https://github.com/prusa3d/PrusaSlicer/releases", id="prusa-version">Loading...</a>
       </div>
   </div>
 
   <div class="button-container">
       <button onclick="fetchLatestVersions()">Reload versions</button>
   </div>
+
+  <hr>
+
+  <div class="calculators-hierarchy">
+    <h2>Calculators</h2> 
+  </div>
+  <div class="main-container">
+        
+    <div class="calc">
+        <h2>Firmware</h2>
+        <button class="calculator-button" onclick="location.href='klipper-calculator.html'">Klipper</button>
+        <button class="calculator-button" onclick="location.href='marlin-calculator.html'">Marin</button>
     </div>
+
+    <div class="calc">
+        <h2>Slicer</h2>
+        <button class="calculator-button" onclick="location.href='orcaslicer-calculator.html'">Orca Slicer</button>
+        <button class="calculator-button" onclick="location.href='prusaslicer-calculator.html'">Prusa Slicer</button>
+    </div>
+
+    <div class="calc">
+        <h2>Other</h2>
+    </div>
+    
+  </div>
+  
+
     <script>
         async function fetchLatestVersion(repo, elementId) {
             try {
