@@ -124,10 +124,6 @@
             let modifier = parseFloat(document.getElementById("modifier").value);
             let old_flow_rate = parseFloat(document.getElementById("old_flow").value);
             
-            if (isNaN(modifier) || modifier <= 0) {
-                alert("Enter valid modifier value!");
-                return;
-            }
             if (isNaN(old_flow_rate) || old_flow_rate <= 0) {
                 alert("Enter valid old flow rate value!");
                 return;
