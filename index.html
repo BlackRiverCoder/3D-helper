@@ -95,7 +95,7 @@
             display: flex;
             justify-content: center;
             gap: 50px;
-            padding: 40px 0;
+            padding: 10px 0;
             flex-wrap: wrap;
         }
         .calculator-button {
@@ -121,6 +121,12 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .special {
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -219,9 +225,18 @@
     <div class="calc">
         <h2>Other</h2>
     </div>
-    
   </div>
-  
+
+  <hr>
+
+  <div class="specials-hierarchy">
+      <h2>Specials</h2> 
+  </div>
+  <div class="main-container">
+      <div class="special">
+        <button class="calculator-button" onclick="location.href='klipper-PID-fix.html'">Klipper PID calibration fix</button>
+      </div>
+  </div>
 
     <script>
         async function fetchLatestVersion(repo, elementId) {
