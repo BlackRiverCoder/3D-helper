@@ -7,6 +7,25 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #1E1E1E; color: #E0E0E0;}
         h1 {display: inline-block; border-bottom: 3px solid blue; margin-bottom: 2px}
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
         .terminal {
             background-color: #1E1E1E;
             color: #C0C0C0;
@@ -125,6 +144,7 @@
     </style>
 </head>
 <body>
+    <a class="home-button" onclick="location.href='orcaslicer-calculator.html'">Home</a>
     <div class="welcome">
       <h1>Welcome to KLIPPER PID tuning fix</h1>
       <h4>Klipper doesn't really have good working PID tuning. This script which generates PID values by several methods should help you to get almost perfect PID tuning. Big shoutout to <a href="https://klipper.discourse.group/u/RK3/summary">RK3</a> from Klipper forum, who made this script.</h4>
