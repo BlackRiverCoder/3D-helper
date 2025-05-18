@@ -132,6 +132,31 @@
             flex-direction: column;
             justify-content: center;
         }
+        .other {
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+        }
+        .other-button {
+            display: block;
+            margin: 10px 0;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 250px;
+        }
+        .other-button:hover {
+            background-color: #005f73;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -219,11 +244,6 @@
     <div class="calc">
         <h2>Slicer</h2>
         <button class="calculator-button" onclick="location.href='orcaslicer-calculator.html'">OrcaSlicer</button>
-        <button class="calculator-button" onclick="location.href='prusaslicer-calculator.html'" disabled>PrusaSlicer</button>
-    </div>
-
-    <div class="calc">
-        <h2>Other</h2>
     </div>
   </div>
 
@@ -236,6 +256,18 @@
       <div class="special">
         <button class="calculator-button" onclick="location.href='klipper-PID-fix.html'">Klipper PID calibration fix</button>
       </div>
+  </div>
+
+  <hr>
+
+  <div class="other-hierarchy">
+    <h2>Other</h2>
+  </div>
+  <div class="main-container">
+    <div class="other">
+        <button class="other-button" onclick="location.href='klipper-accelerometer.html'">Klipper Accelerometer</button>
+        <button class="other-button" onclick="location.href='klipper-flash-update.html'">Klipper flash</button>
+    </div>
   </div>
 
     <script>

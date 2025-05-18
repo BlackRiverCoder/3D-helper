@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klipper flash</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #1E1E1E; color: #E0E0E0;}
+        h1 {display: inline-block; border-bottom: 3px solid blue; margin-bottom: 2px}
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        .terminal {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 20px;
+        }
+        .terminal-long {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1250px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 20px;
+        }
+        .terminal-wide {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 100px;
+        }
+        .terminal-wide-2 {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 150px;
+        }
+        .terminal-left {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            margin-left: 100px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 20px;
+        }
+        .terminal-3 {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 120px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .command {
+            margin: 0;
+            padding: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            flex-grow: 1;
+            text-align: left;
+        }
+        .copy-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+        .tooltip {
+            visibility: hidden;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            top: -35px;
+            right: 10px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .show-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .align-left {
+            text-align: left;
+            padding-top: 35px;
+        }
+        .align-left-tab {
+            text-align: left;
+            text-indent: 50px;
+        }
+        .align-left-tab-section {
+            text-align: left;
+            text-indent: 50px;
+            margin-top: 50px;
+        }
+        .align-left-tab-tab {
+            text-align: left;
+            text-indent: 100px;
+        }
+        hr {
+              width: 100%;
+              height: 2px;
+              background: linear-gradient(to right, transparent, black, transparent);
+              border: none;
+              margin: 30px 0;
+          }
+    </style>
+</head>
+<body>
+    <a class="home-button" onclick="location.href='index.html'">Home</a>
+    <div class="welcome">
+      <h1>Welcome to KLIPPER board flashing</h1>
+      <h4>This site will guide you how to flash KLIPPER firmware to your board.</h4>
+    </div>
+
+    <hr>
+
+    <div class="firmware">
+        <h2>Building firmware</h2>
+    </div>
+
+    <h4 class="align-left">1.) Connect to your klipper server and update the system</h4>
+
+    <div class="terminal">
+        <pre class="command">sudo apt update && sudo apt upgrade -y</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h4 class="align-left">2.) Build firmware</h4>
+
+    <h5 class="align-left-tab-section"> > move to the klipper directory</h5>
+    <div class="terminal">
+        <pre class="command">cd ~/klipper</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    <h5 class="align-left-tab-section"> > open menuconfig</h5>
+    <div class="terminal">
+        <pre class="command">make menuconfig</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    <h5 class="align-left-tab-section"> > setup menuconfig</h5>
+    <h5 class="align-left-tab-tab">Select your Micro-controller</h5>
+    </div>
+    <h5 class="align-left-tab"> - press <strong>Q</strong> key and save configuration with <strong>Y</strong> key</h5>
+
+    <h5 class="align-left-tab-section"> > compile firmware</h5>
+    <div class="terminal">
+        <pre class="command">make</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <hr>
+    
+    <div class="firmware">
+        <h2>Flashing firmware</h2>
+    </div>
+
+    <h4 class="align-left">1.) Enquire board ID</h4>
+    <div class="terminal">
+        <pre class="command">ls /dev/serial/by-id/*</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h5 class="align-left-tab-tab">Now you should see something like <strong>/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0</strong>, every board has it's unique ID.</h5>
+
+    <h4 class="align-left">2.) Flash firmware</h4>
+    <h5 class="align-left-tab-section"> > stop klipper</h5>
+    <div class="terminal">
+        <pre class="command">sudo service klipper stop</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    <h5 class="align-left-tab-section"> > flash firmware</h5>
+    <div class="terminal">
+        <pre class="command">cd ~/klipper/ && make flash FLASH_DEVICE=/your board id/</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    <h5 class="align-left-tab-section"> > start klipper</h5>
+    <div class="terminal">
+        <pre class="command">sudo service klipper start</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <script>
+        function copyToClipboard(button) {
+            const commandText = button.parentElement.querySelector('.command').innerText;
+            navigator.clipboard.writeText(commandText).then(() => {
+                const tooltip = button.parentElement.querySelector(".tooltip");
+                tooltip.classList.add("show-tooltip");
+                setTimeout(() => {
+                    tooltip.classList.remove("show-tooltip");
+                }, 1500);
+            });
+        }
+
+        function toggleCode() {
+            let codeBlock = document.getElementById("code-block");
+            let button = event.target;
+
+            if (codeBlock.style.maxHeight) {
+                codeBlock.style.maxHeight = null;
+                button.innerText = "📂 Show Code";
+            } else {
+                codeBlock.style.maxHeight = codeBlock.scrollHeight + "px";
+                button.innerText = "📂 Hide Code";
+            }
+        }
+
+        function downloadCode() {
+            const codeText = document.getElementById("code-snippet").innerText;
+            const blob = new Blob([codeText], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "PID-calibration.py";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

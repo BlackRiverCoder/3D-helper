@@ -46,8 +46,8 @@
             background-color: #1E1E1E;
             padding: 10px;
             border-radius: 8px;
-            width: 100%;
-            max-width: 95%px;
+            width: 93%;
+            max-width: 93%px;
             border: 1px solid #555;
             margin: 0 auto;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
@@ -72,7 +72,7 @@
         }
         .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             margin-top: 10px;
         }
         button {
@@ -160,7 +160,7 @@
 
     <div class="terminal">
         <pre class="command">sudo apt update && sudo apt upgrade -y</pre>
-        <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
         <span class="tooltip" id="tooltip">Copied!</span>
     </div>
 
@@ -168,12 +168,12 @@
 
     <div class="terminal">
         <pre class="command">sudo pip3 install pandas scipy --break-system-packages</pre>
-        <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
         <span class="tooltip" id="tooltip">Copied!</span>
     </div>
     <div class="terminal">
         <pre class="command">sudo apt-get install libopenblas-dev</pre>
-        <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
         <span class="tooltip" id="tooltip">Copied!</span>
     </div>
 
@@ -614,7 +614,6 @@ print(f"Results written to {results_file}")
     </div>
 
     <div class="buttons" style="max-width: 700px; margin: auto; margin-top: 10px;">
-        <button onclick="copyToClipboard()">📋 Copy</button>
         <button onclick="downloadCode()">⬇️ Download</button>
     </div>
 
@@ -622,7 +621,7 @@ print(f"Results written to {results_file}")
 
     <div class="terminal">
         <pre class="command">git clone https://github.com/BlackRiverCoder/klipper-pid-fix.git</pre>
-        <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
         <span class="tooltip" id="tooltip">Copied!</span>
     </div>
 
@@ -636,7 +635,7 @@ print(f"Results written to {results_file}")
 
     <div class="terminal">
         <pre class="command">python3 PID-calibration.py</pre>
-        <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
         <span class="tooltip" id="tooltip">Copied!</span>
     </div>
 
@@ -665,10 +664,10 @@ print(f"Results written to {results_file}")
 
     
     <script>
-        function copyToClipboard() {
-            const commandText = document.querySelector('.command').innerText;
+        function copyToClipboard(button) {
+            const commandText = button.parentElement.querySelector('.command').innerText;
             navigator.clipboard.writeText(commandText).then(() => {
-                const tooltip = document.getElementById("tooltip");
+                const tooltip = button.parentElement.querySelector(".tooltip");
                 tooltip.classList.add("show-tooltip");
                 setTimeout(() => {
                     tooltip.classList.remove("show-tooltip");

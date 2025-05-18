@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klipper Accelerometer</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #1E1E1E; color: #E0E0E0;}
+        h1 {display: inline-block; border-bottom: 3px solid blue; margin-bottom: 2px}
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        .terminal {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 20px;
+        }
+        .terminal-long {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1250px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 20px;
+        }
+        .terminal-wide {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 100px;
+        }
+        .terminal-wide-2 {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 150px;
+        }
+        .terminal-left {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            margin-left: 100px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 20px;
+        }
+        .terminal-3 {
+            background-color: #1E1E1E;
+            color: #C0C0C0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid #555;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            height: 120px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .command {
+            margin: 0;
+            padding: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            flex-grow: 1;
+            text-align: left;
+        }
+        .copy-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+        .tooltip {
+            visibility: hidden;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            top: -35px;
+            right: 10px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .show-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .align-left {
+            text-align: left;
+            padding-top: 35px;
+        }
+        .align-left-tab {
+            text-align: left;
+            text-indent: 50px;
+        }
+        .align-left-tab-section {
+            text-align: left;
+            text-indent: 50px;
+            margin-top: 50px;
+        }
+        .align-left-tab-tab {
+            text-align: left;
+            text-indent: 100px;
+        }
+        hr {
+              width: 100%;
+              height: 2px;
+              background: linear-gradient(to right, transparent, black, transparent);
+              border: none;
+              margin: 30px 0;
+          }
+    </style>
+</head>
+<body>
+    <a class="home-button" onclick="location.href='index.html'">Home</a>
+    <div class="welcome">
+      <h1>Welcome to KLIPPER Accelerometer setup</h1>
+      <h4>This site will guide you how to set up an accelerometer and how to use it for input shaping. Accelerometer used in this guide is <strong>FLY ADXL345 USB</strong>, but the procedure is similar to every type.</h4>
+    </div>
+
+    <hr>
+
+    <div class="firmware">
+        <h2>Flashing firmware to the accelerometer</h2>
+    </div>
+
+    <h4 class="align-left">1.) Connect to your klipper server and update the system</h4>
+
+    <div class="terminal">
+        <pre class="command">sudo apt update && sudo apt upgrade -y</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h4 class="align-left">2.) Build firmware for accelerometer</h4>
+
+    <h5 class="align-left-tab-section"> > move to the klipper directory</h5>
+    <div class="terminal">
+        <pre class="command">cd ~/klipper</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    <h5 class="align-left-tab-section"> > open menuconfig</h5>
+    <div class="terminal">
+        <pre class="command">make menuconfig</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    <h5 class="align-left-tab-section"> > setup menuconfig</h5>
+    <div class="terminal-3">
+        <pre class="command">1. Check <strong>Enable extra low-level configuration options</strong></pre>
+        <pre class="command">2. Select <strong>Raspberry Pi RP2040/RP235x</strong> Micro-controller Architecture</pre>
+        <pre class="command">3. Set <strong>Bootloader offset</strong> to <strong>No bootloader</strong></pre>
+    </div>
+    <h5 class="align-left-tab"> - press <strong>Q</strong> key and save configuration with <strong>Y</strong> key</h5>
+
+    <h5 class="align-left-tab-section"> > compile firmware</h5>
+    <div class="terminal">
+        <pre class="command">make -j4</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    
+    <h4 class="align-left">3.) Flash firmware to the accelerometer</h4>
+
+    <h5 class="align-left-tab">On the accelerometer press and hold <strong>BOOTSEL</strong> button and connect it to your klipper server.</h5>
+    <h5 class="align-left-tab-section"> > check connection</h5>
+    <div class="terminal">
+        <pre class="command">lsusb</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    <h5 class="align-left-tab-tab">If you get error that <strong>lsusb</strong> doesn't exist, install it usign this command:</h5>
+    <div class="terminal-left">
+        <pre class="command">sudo apt-get install <strong>usbutils</strong></pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h5 class="align-left-tab">In <strong>lsusb</strong> output you should see <strong>Bus xxx Device xxx: ID 1d50:614e</strong>, where <strong>1d50:614e</strong> is important, if you see it, you can proceed to the next step.</h5>    
+
+    <h5 class="align-left-tab-section"> > enquire board ID</h5>
+    <div class="terminal">
+        <pre class="command">ls /dev/serial/by-id/*</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h5 class="align-left-tab-tab">Now you should see something like <strong>/dev/serial/by-id/usb-Klipper_rp2040_54321-if00</strong>, every board has it's unique ID.</h5>
+
+    <h5 class="align-left-tab-section"> > flash firmware</h5>
+    <div class="terminal">
+        <pre class="command">cd ~/klipper/ && make flash FLASH_DEVICE=/your board id/</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <hr>
+
+    <div class="cfg-config">
+        <h2>Add accelerometer to <strong>printer.cfg</strong></h2>
+    </div>
+    <h5 class="align-left-tab-section"> > open <strong>printer.cfg</strong> and put in this section</h5>
+    <div class="terminal-wide-2">
+        <pre class="command">[mcu adxl]
+serial: /dev/serial/by-id/-your board id-
+
+[adxl345]
+cs_pin: adxl:gpio9
+spi_software_sclk_pin: adxl:gpio10
+spi_software_mosi_pin: adxl:gpio11
+spi_software_miso_pin: adxl:gpio12</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <hr>
+
+    <div class="measure">
+        <h2>Measure input shaping values</h2>
+    </div>
+    <h5 class="align-left">Now if you have attached the accelerometer to your printer head, you can start with <strong>input shaping calibration.</strong></h5>
+
+    <h5 class="align-left-tab-section"> > test accelerometer</h5>
+    <div class="terminal">
+        <pre class="command">ACCELEROMETER_QUERY</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+    <h5 class="align-left-tab-tab">As an output you should get something like this <strong>Recv: // adxl345 values (x, y, z): 470.719200, 941.438400, 9728.196800</strong></h5>
+
+    <h5 class="align-left-tab-section"> > Measure X Axis</h5>
+    <div class="terminal">
+        <pre class="command">TEST_RESONANCES AXIS=X</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h5 class="align-left-tab-section"> > Measure Y Axis</h5>
+    <div class="terminal">
+        <pre class="command">TEST_RESONANCES AXIS=Y</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <hr>
+
+    <div class="measure">
+        <h2>Calculate input shaping values</h2>
+    </div>
+    <h5 class="align-left">Calibration should output 2 files <strong>/tmp/resonances_x_*.csv</strong> and <strong>/tmp/resonances_y_*.csv</strong> and you need to calculate shaping values from these files.</h5>
+
+    <h5 class="align-left-tab-section"> > calculate X Axis values</h5>
+    <div class="terminal-long">
+        <pre class="command">~/klipper/scripts/calibrate_shaper.py /tmp/resonances_x_*.csv -o /tmp/shaper_calibrate_x.png</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h5 class="align-left-tab-section"> > calculate Y Axis values</h5>
+    <div class="terminal-long">
+        <pre class="command">~/klipper/scripts/calibrate_shaper.py /tmp/resonances_y_*.csv -o /tmp/shaper_calibrate_y.png</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h5 class="align-left">As an output you should get something like this: <strong>Recommended shaper is mzv @ 34.6 Hz</strong>, different values for every axis.</h5>
+
+    <hr>
+
+    <div class="set">
+        <h2>Apply calculated input shaping values</h2>
+    </div>
+    <h5 class="align-left-tab-section"> > open <strong>printer.cfg</strong> and put in this section with your values</h5>
+    <div class="terminal-wide">
+        <pre class="command">[input_shaper]
+shaper_freq_x: ...
+shaper_type_x: ...
+shaper_freq_y: 34.6
+shaper_type_y: mzv</pre>
+        <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy</button>
+        <span class="tooltip" id="tooltip">Copied!</span>
+    </div>
+
+    <h3 class="align-left">After calibration, remove <strong>[mcu adxl]</strong> and <strong>[adxl345]</strong> sections or comment the lines using <strong>#</strong> to prevent errors when you disconnect the accelerometer.</h3>
+
+    <script>
+        function copyToClipboard(button) {
+            const commandText = button.parentElement.querySelector('.command').innerText;
+            navigator.clipboard.writeText(commandText).then(() => {
+                const tooltip = button.parentElement.querySelector(".tooltip");
+                tooltip.classList.add("show-tooltip");
+                setTimeout(() => {
+                    tooltip.classList.remove("show-tooltip");
+                }, 1500);
+            });
+        }
+
+        function toggleCode() {
+            let codeBlock = document.getElementById("code-block");
+            let button = event.target;
+
+            if (codeBlock.style.maxHeight) {
+                codeBlock.style.maxHeight = null;
+                button.innerText = "📂 Show Code";
+            } else {
+                codeBlock.style.maxHeight = codeBlock.scrollHeight + "px";
+                button.innerText = "📂 Hide Code";
+            }
+        }
+
+        function downloadCode() {
+            const codeText = document.getElementById("code-snippet").innerText;
+            const blob = new Blob([codeText], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "PID-calibration.py";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
