@@ -1,7 +1,5 @@
 # 3D‑Helper 🛠️  
-[![Last commit](https://img.shields.io/github/last-commit/blackrivercoder/3D-helper)](https://github.com/blackrivercoder/3D-helper/commits/main)  
-[![GitHub release](https://img.shields.io/github/v/release/blackrivercoder/3D-helper?style=flat-square)](https://github.com/blackrivercoder/3D-helper/releases)  
-[![GitHub stars](https://img.shields.io/github/stars/blackrivercoder/3D-helper?style=social)](https://github.com/blackrivercoder/3D-helper/stargazers)  
+[![Last commit](https://img.shields.io/github/last-commit/blackrivercoder/3D-helper)](https://github.com/blackrivercoder/3D-helper/commits/main) [![GitHub release](https://img.shields.io/github/v/release/blackrivercoder/3D-helper?style=flat-square)](https://github.com/blackrivercoder/3D-helper/releases) [![GitHub stars](https://img.shields.io/github/stars/blackrivercoder/3D-helper?style=social)](https://github.com/blackrivercoder/3D-helper/stargazers) 
 
 
 🔗 **Website:**  
