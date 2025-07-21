@@ -24,16 +24,15 @@ Quick reference for the latest versions of:
 ## 🧮 Calculators
 
 - Speed converter: **mm/s ↔ mm/min**  
-- OrcaSlicer pressure advance calculator  
-- Marlin steps/mm calculator  
-- Klipper input shaper calculator
+- OrcaSlicer - calibrations calculators (flow, pressure advance, max. volumetric speed) 
+- Marlin & Klipper - rotation distance <=> steps/mm **and a lot more!**
 
 ---
 
 ## 🔧 Klipper Tools
 
-- **PID Fixer** – correct PID config values  
-- **Accelerometer helper** – visualize & setup input shaper  
+- **PID Fixer** – for better PID calibration results 
+- **Accelerometer helper** – setup input shaping 
 - **Flashing guide** – for updating or installing Klipper firmware  
 
 ---
